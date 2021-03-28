@@ -96,6 +96,7 @@ load_dotenv()
 cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), 
     api_secret=os.getenv('API_SECRET'))
 ```
+![Setting up env in heroku](./heroku-env.jpg)
 
 ## Cloudinary
 
@@ -105,3 +106,7 @@ cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), api_key=os.getenv('API_K
  ````
 
  See app.js code for sample upload import and command.
+
+## Testing heroku
+
+![Using postman](./postman.jpg)
