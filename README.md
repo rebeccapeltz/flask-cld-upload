@@ -55,8 +55,10 @@ heroku create
 heroku open
  ``` 
 
-https://fierce-beyond-89669.herokuapp.com/ | https://git.heroku.com/fierce-beyond-89669.git
+https://safe-tor-51739.herokuapp.com/ | https://git.heroku.com/safe-tor-51739.git
 
 git push heroku master
 heroku open
 
+usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip
+python3 -m pip freeze > requirements.txt
