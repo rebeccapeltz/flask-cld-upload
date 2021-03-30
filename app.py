@@ -4,7 +4,7 @@ import cloudinary.api
 import logging
 import os
 from dotenv import load_dotenv
-import json
+from flask import json
 
 load_dotenv()
 
@@ -33,8 +33,13 @@ def upload_file():
     if file_to_upload:
       upload_result = cloudinary.uploader.upload(file_to_upload)
       app.logger.info(upload_result)
-      python2json = json.dumps(upload_result)
-      return python2json
+
+      response = app.response_class(
+        response=json.dumps(upload_result),
+        status=200,
+        mimetype='application/json'
+      )
+      return response
 
 if __name__ == '__main__':
     app.run()
