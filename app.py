@@ -36,7 +36,7 @@ def upload_file():
     if file_to_upload:
       upload_result = cloudinary.uploader.upload(file_to_upload)
       app.logger.info(upload_result)
-      return jsonify(upload_result), 200
+      return jsonify(upload_result)
 
 if __name__ == '__main__':
     app.run()
