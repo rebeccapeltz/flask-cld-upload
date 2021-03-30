@@ -4,13 +4,16 @@ import cloudinary.api
 import logging
 import os
 from dotenv import load_dotenv
-from flask import json
+# from flask import json
+from flask_cors import CORS
+from flask import jsonify
 
 load_dotenv()
 
 
 from flask import Flask,render_template, request
 app = Flask(__name__)
+CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 #verify cloud
 app.logger.info('%s',os.getenv('CLOUD_NAME'))
@@ -33,13 +36,7 @@ def upload_file():
     if file_to_upload:
       upload_result = cloudinary.uploader.upload(file_to_upload)
       app.logger.info(upload_result)
-
-      response = app.response_class(
-        response=json.dumps(upload_result),
-        status=200,
-        mimetype='application/json'
-      )
-      return response
+      return jsonify(upload_result), 200
 
 if __name__ == '__main__':
     app.run()
