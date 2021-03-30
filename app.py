@@ -4,6 +4,7 @@ import cloudinary.api
 import logging
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -32,7 +33,8 @@ def upload_file():
     if file_to_upload:
       upload_result = cloudinary.uploader.upload(file_to_upload)
       app.logger.info(upload_result)
-      return upload_result
+      python2json = json.dumps(upload_result)
+      return python2json
 
 if __name__ == '__main__':
     app.run()
