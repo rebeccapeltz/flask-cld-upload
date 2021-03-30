@@ -5,7 +5,7 @@ import logging
 import os
 from dotenv import load_dotenv
 # from flask import json
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask import jsonify
 
 load_dotenv()
@@ -22,8 +22,10 @@ app.logger.info('%s',os.getenv('CLOUD_NAME'))
 @app.route('/')
 def hello():
     return "Hello World!"
-  
-@app.route('/upload', methods=['POST'])
+
+
+@app.route("/upload", methods=['POST'])
+@cross_origin()
 def upload_file():
   app.logger.info('in upload route')
 
