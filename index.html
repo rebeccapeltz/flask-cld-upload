@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post and Image</title>
+  </head>
+
+  <body>
+    <h1>Picture Upload Form Submit</h1>
+
+    <form>
+      Picture File:<input id="media" type="file" /><br /><br />
+      <input type="submit" name="" value="Upload Picture" /><br />
+    </form>
+
+    <script>
+      document.querySelector("form").addEventListener("submit", (event) => {
+        const fileInput = document.querySelector("#media");
+        const formData = new FormData();
+
+        formData.append("file", fileInput.files[0]);
+
+        const options = {
+          method: "POST",
+          body: formData,
+        };
+
+        fetch("http://127.0.0.1:5000/upload", options)
+          .then((response) => {
+            response.json();
+          })
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    </script>
+  </body>
+</html>
