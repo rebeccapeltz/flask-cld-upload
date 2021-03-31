@@ -13,7 +13,8 @@ If you're working with a powerful Backend framework like Python Flask, you'll be
 Very quickly, let's clarify the distinction between **Frontend** and **Backend**.  Generally, code that runs on the server is Backend and code that runs on the browser is Frontend.  However, since code running on the server can render  HTML, CSS and JavaScript which all run on the browser, there can be some confusion here.  In the context of the Cloudinary SDK's, Backend SDK's can read secret credentials that should not be shared in the Frontend.  Backend environment variables need never by exposed in the Frontend.  Frontend SDK's can't hide credentials that are meant to be kept secret.  Cloudinary provides **Unsigned Presets** to enable functionality like Upload in browser code without revealing secrets, but if you can write a backend API to perform your upload, you will have a secure upload without revealing your API_SECRET.  If you're using Python Flask or Python Django, you can read on to see how to do this using the Python SDK.
 
 ## Coding a Flask API to Upload to Cloudinary
-The Flask framework makes it easy to define routes and their functionality.  We'll create a route named `/upload`.  This route will accept a POST containing multipart/form-data. We'll package up the image file input in a submit handler and POST it to our own Flack API.  Flask's `request` allows us to get data from the client.  When submitting files, such as uploading an image file, you can call upon the request option to access the files.  
+The Flask framework makes it easy to define routes and their functionality.  We'll create a route named `/upload`.  This route will accept a POST containing [multipart/form-data](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST). We'll package up the image file input into a FormData object in a submit handler, and POST it to our own Flack API.  Our API will call Cloudinary Upload API configured with our full set of Cloudinary credentials.  
+Flask's `request` allows us to get data from the client.  When submitting files, such as uploading an image file, you can call upon the request option to access the files.  
 
 ```python
 from flask import Flask,render_template, request
@@ -21,7 +22,7 @@ if request.method == 'POST':
     file_to_upload = request.files['file']
 ```
 
-The data retrieved from the `request.files['file'] is an instance of **werkzeug.FileStorage**.  The object can be handed off to the Python Upload SDK function.
+The data retrieved from the `request.files['file']` is an instance of **werkzeug.FileStorage**.  The object can be handed off to the Python Upload SDK function. Flask wraps [Werkzeug](https://palletsprojects.com/p/werkzeug/), using it to handle the details of WSGI (Web Server Gateway Interface).
 
 ```python
 if file_to_upload:
@@ -103,6 +104,26 @@ python3 -m pip freeze > requirements.txt
  python3 -m pip install cloudinary
  python3 -m pip freeze > requirements.txt
  ```
+
+ ### install Cors support
+ If we want to access our `upload` API from a client that is served from a different host, we'll need to add CORS (Cross Origin Resource Sharing) support.
+
+ ```bash
+python3 -m pip install flask-cors
+python3 -m pip freeze > requirements.txt
+```
+
+Now, we can add some code to configure the CORS
+
+```python
+from flask_cors import CORS, cross_origin
+app = Flask(__name__)
+# somewhere after creating the Flask app you can make all API's allow cross origin access.
+CORS(app)
+# or a specific API
+@app.route("/upload", methods=['POST'])
+@cross_origin()
+```
 
 ### Working with Environment Variables
 
