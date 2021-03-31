@@ -29,12 +29,14 @@ python3 -m pip freeze > requirements.txt
 ```bash
 python3 app.py 
 ```
-### upgrade pip
+### upgrade pip 
 
 ```bash
 usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip
 python3 -m pip freeze > requirements.txt
 ```
+
+
 
 ## Heroku Deploy
 
@@ -62,8 +64,6 @@ heroku create
 heroku open
  ``` 
 
-### Sample app
-https://safe-tor-51739.herokuapp.com/ | https://git.heroku.com/safe-tor-51739.git
 
 #### Summary of heroku deploy
 
@@ -110,3 +110,10 @@ cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), api_key=os.getenv('API_K
 ## Testing heroku
 
 ![Using postman](./postman.jpg)
+
+## CORS Support
+
+```bash
+python3 -m pip install flask-cors
+python3 -m pip freeze > requirements.txt
+```

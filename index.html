@@ -17,6 +17,7 @@
 
     <script>
       document.querySelector("form").addEventListener("submit", (event) => {
+        event.preventDefault();
         const fileInput = document.querySelector("#media");
         const formData = new FormData();
 
@@ -29,7 +30,7 @@
 
         fetch("http://127.0.0.1:5000/upload", options)
           .then((response) => {
-            response.json();
+            return response.json();
           })
           .then((data) => {
             console.log(data);

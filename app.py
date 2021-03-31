@@ -4,7 +4,6 @@ import cloudinary.api
 import logging
 import os
 from dotenv import load_dotenv
-# from flask import json
 from flask_cors import CORS, cross_origin
 from flask import jsonify
 
@@ -38,6 +37,7 @@ def upload_file():
     if file_to_upload:
       upload_result = cloudinary.uploader.upload(file_to_upload)
       app.logger.info(upload_result)
+      app.logger.info(type(upload_result))
       return jsonify(upload_result)
 
 if __name__ == '__main__':
