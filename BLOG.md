@@ -1,4 +1,4 @@
-# Using Flask to Create an API to Upload Data to Cloudinary
+# Using Python Flask to Create an API to Upload Data to Cloudinary
 
 [Code](https://github.com/rebeccapeltz/flask-cld-upload)
 
