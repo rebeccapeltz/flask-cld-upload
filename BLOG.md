@@ -6,13 +6,13 @@
 
 Cloudinary provides SDK's for many programming languages and frameworks.  While there is an Upload API endpoint that can be used in both backend and frontend code most developers find the SDK's very helpful.
 
-If you're working with a powerful Backend framework like Python Flask, you'll be happy to hear that there is a Python SDK that you can use.  
+If you're working with a powerful backend framework like Python Flask, you'll be happy to hear that there is a Python SDK that you can use.  
 
-We're going to walk through uploading an image to Cloudinary, but the code we're creating can be easily used to upload any file type including Video, and even non-media files.
+We're going to walk through uploading an image to Cloudinary, but the code we're creating can be easily used to upload any file type including video, and even non-media files.
 
 ## Backend vs. Frontend Clarified
 
-Very quickly, let's clarify the distinction between **Frontend** and **Backend**.  Generally, code that runs on the server is Backend and code that runs on the browser is Frontend.  However, since code running on the server can render  HTML, CSS and JavaScript which all run on the browser, there can be some confusion here.  In the context of the Cloudinary SDK's, Backend SDK's can read secret credentials that should not be shared in the Frontend.  Backend environment variables need never by exposed in the Frontend.  Frontend SDK's can't hide credentials that are meant to be kept secret.  Cloudinary provides **Unsigned Presets** to enable functionality like Upload in browser code without revealing secrets, but if you can write a backend API to perform your upload, you will have a secure upload without revealing your API_SECRET.  If you're using Python Flask or Python Django, you can read on to see how to do this using the Python SDK.
+Very quickly, let's clarify the distinction between **Frontend** and **Backend**.  Generally, code that runs on the server is Backend and code that runs on the browser is Frontend.  However, since code running on the server can render  HTML, CSS and JavaScript which all run on the browser, there can be some confusion here.  In the context of the Cloudinary SDK's, Backend SDK's can read secret credentials that should not be shared in the Frontend.  Backend environment variables need never by exposed in the Frontend.  Frontend SDK's can't hide credentials that are meant to be kept secret.  Cloudinary provides [**Unsigned Presets**](https://cloudinary.com/documentation/upload_presets) to enable functionality like Upload in browser code without revealing secrets, but if you can write a backend API to perform your upload, you will have a secure upload without revealing your API_SECRET.  If you're using Python Flask or Python Django, you can read on to see how to do this using the Python SDK.
 
 ## Coding a Flask API to Upload to Cloudinary
 The Flask framework makes it easy to define routes and their functionality.  We'll create a route named `/upload`.  This route will accept a POST containing [multipart/form-data](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST). We'll package up the image file input into a FormData object in a submit handler, and POST it to our own Flack API.  Our API will call Cloudinary Upload API configured with our full set of Cloudinary credentials.  
@@ -33,7 +33,7 @@ if file_to_upload:
 
 ```
 
-The default upload resource_type when uploading to Cloudinary is `image`.  If we want to expand or create a new Flack API we can add `resource_type: 'video'` or `resource_type: 'raw'` if we want to upload video or raw files.  [Raw](https://cloudinary.com/documentation/upload_images#uploading_non_media_files_as_raw_files) refers to non-media file formats include text, JSON.
+The default upload `resource_type` when uploading to Cloudinary is `image`.  If we want to expand, or create a new, Flask API we can add `resource_type: 'video'` or `resource_type: 'raw'` if we want to upload video or raw files.  [Raw](https://cloudinary.com/documentation/upload_images#uploading_non_media_files_as_raw_files) refers to non-media file formats including text and JSON.
 
 
 Finally, the `upload_result` is an object that contains the upload response.  This response can be returned to the client to complete the actions of our `upload` API.
@@ -43,7 +43,7 @@ from flask import jsonify
 return jsonify(upload_result)
 ```
 
-The code for out `upload` API is shown below.
+The code for our `upload` API is shown below.
 
 ```python
 @app.route("/upload", methods=['POST'])
@@ -95,22 +95,24 @@ The `requirements.txt` will keep track of all the versioned libraries needed for
 ```bash
 python3 -m pip freeze > requirements.txt
 ```
-### upgrade pip if necessary
+### Upgrade pip if necessary
 
-You command may vary based on your local python installation. The `freeze` will write the 
+Your command may vary based on your local python installation. The `freeze` will write the library and version to `requirements.txt`.
 
 ```bash
 usr/local/opt/python@3.9/bin/python3.9 -m pip install --upgrade pip
 python3 -m pip freeze > requirements.txt
 ```
-### install Cloudinary 
+### Install Cloudinary 
+
+Installing Cloudinary will give us access to the Upload API SDK for Python.
 
 ```bash
  python3 -m pip install cloudinary
  python3 -m pip freeze > requirements.txt
  ```
 
- ### install Cors support
+ ### Install CORS support
  If we want to access our `upload` API from a client that is served from a different host, we'll need to add CORS (Cross Origin Resource Sharing) support.
 
  ```bash
@@ -118,7 +120,7 @@ python3 -m pip install flask-cors
 python3 -m pip freeze > requirements.txt
 ```
 
-Now, we can add some code to configure the CORS
+Now, we can add some code to configure the CORS for all APIs and specifically the `upload` API.  This is redundant but shown to demonstrate both options.
 
 ```python
 from flask_cors import CORS, cross_origin
@@ -132,13 +134,13 @@ CORS(app)
 
 ### Working with Environment Variables
 
-Python makes it easy to load environment variables.  The `python-dotenv` library is modeled on the Node.js `python-dotenv` package.  We'll need 3 environment variable from Cloudinary made available to our code: CLOUD_NAME, API_KEY, and API_SECRET.  Don't share API_SECRET.  These variables can be exported to the local environment.  When we deploy to Heroku, we'll see they have a way to add environment variables so that they are available to the app when running in a Heroku container.
+Python makes it easy to load environment variables.  The `python-dotenv` library is modeled on the Node.js `dotenv` package.  We'll need 3 environment variable from Cloudinary made available to our code: CLOUD_NAME, API_KEY, and API_SECRET.  Don't share API_SECRET.  These variables can be exported to the local environment.  When we deploy to Heroku, we'll see they have a way to add environment variables so that they are available to the app when running in a Heroku container.
 
 ```python
 from dotenv import load_dotenv
 load_dotenv()
 ```
-In our `upload` API, we use the `cloudinary.config` function to read in the environment variables.  The `dotenv` library lets us use the `os.getenv` command to access them.
+In our `upload` API, we use the `cloudinary.config()` function to read in the environment variables.  The `dotenv` library lets us use the `os.getenv()` function to access them.
 
 ```python
 cloudinary.config(cloud_name = os.getenv('CLOUD_NAME'), api_key=os.getenv('API_KEY'), 
@@ -170,16 +172,16 @@ You can create your app with an upload function by downloading, cloning or copyi
 python3 app.py
 ```
 
-This will open a server at `http://127.0.0.1:5000/`.
+This will open a server at `http://127.0.0.1:5000/`.  Note the default port is 5000.
 
 ### Postman
 
 In Postman, you want to 
 - Set the method to POST 
 - Set the body type to `form-data`
-- Establish Key/Value pairs for input.  The Key should be `file`.  You'll find that as you hover over the Key field, there is a drop down and you can select **Text** or **File**. Select File and then you'll see a **Select Files** button and you can select a file from your local drive  
+- Establish Key/Value pairs for input.  The Key should be `file`.  You'll find that as you hover over the Key field, there is a drop down and you can select **Text** or **File**. Select File and then you'll see a **Select Files** button and you can select a file from your local drive
 - Now press Send to process the request
-- You'll see the Cloudinary Upload API response in the in the Body result at the bottom of the page.
+- You'll see the Cloudinary Upload API response in the in the Body result at the bottom of the page
 
 ![Localhost with Postman](localpostman.jpg)
 
@@ -299,7 +301,7 @@ fetch("https://xxxx.herokuapp.com", options)
 
 ## Security Note
 
-Deploying this app to heroku enables you to upload data to Cloudinary.  If the link is not secured, for example, by using it only on an authenticated web page, anyone can upload to your Cloudinary cloud.  Even though you are hiding your environment variables, you have created an public method to change data on your cloud.
+You'll notice that I have erased the name of my heroku deployment link in all the images. Deploying this app to heroku enables you to upload data to Cloudinary.  If the link is not secured, for example, by using it only on an authenticated web page, anyone can upload to your Cloudinary cloud.  Even though you are hiding your environment variables, you have created an public method to change data on your cloud.
 
 This document doesn't cover adding authentication.  There are many options available.   
 
