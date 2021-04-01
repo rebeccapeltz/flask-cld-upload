@@ -1,4 +1,4 @@
-# Using Cloudinary to Upload Images
+# Using Flack to Create an API Data to Cloudinary
 
 [Code]()
 
@@ -6,7 +6,9 @@
 
 Cloudinary provides SDK's for many programming languages and frameworks.  While there is an Upload API endpoint that can be used in both backend and frontend code most developers find the SDK's very helpful.
 
-If you're working with a powerful Backend framework like Python Flask, you'll be happy to hear that there is a Python SDK that you can use.
+If you're working with a powerful Backend framework like Python Flask, you'll be happy to hear that there is a Python SDK that you can use.  
+
+We're going to walk through uploading an image to Cloudinary, but the code we're creating can be easily used to upload any file type including Video, and even non-media files.
 
 ## Backend vs. Frontend Clarified
 
@@ -22,7 +24,7 @@ if request.method == 'POST':
     file_to_upload = request.files['file']
 ```
 
-The data retrieved from the `request.files['file']` is an instance of **werkzeug.FileStorage**.  The object can be handed off to the Python Upload SDK function. Flask wraps [Werkzeug](https://palletsprojects.com/p/werkzeug/), using it to handle the details of WSGI (Web Server Gateway Interface).
+The data retrieved from the `request.files['file']` is an instance of **werkzeug.FileStorage**.  The object can be handed off to the Python Upload SDK function. Flask wraps [Werkzeug](https://palletsprojects.com/p/werkzeug/), using it to handle the details of WSGI (Web Server Gateway Interface).  
 
 ```python
 if file_to_upload:
@@ -30,6 +32,9 @@ if file_to_upload:
     app.logger.info(upload_result)
 
 ```
+
+The default upload resource_type when uploading to Cloudinary is `image`.  If we want to expand or create a new Flack API we can add `resource_type: 'video'` or `resource_type: 'raw'` if we want to upload video or raw files.  [Raw](https://cloudinary.com/documentation/upload_images#uploading_non_media_files_as_raw_files) refers to non-media file formats include text, JSON.
+
 
 Finally, the `upload_result` is an object that contains the upload response.  This response can be returned to the client to complete the actions of our `upload` API.
 
@@ -217,6 +222,9 @@ You should observe a result like this in your console.
 
 ## Deploying the Flask App to Heroku
 
+Heroku is a PAAS (Platform as a Service) that can be used for serving prototypes or production ready applications.  We'll use it to host the API we've developed here. 
+
+Start by creating a free account on Heroku.
 
 
 ## Test the API deployed on Heroku
