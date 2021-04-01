@@ -247,7 +247,7 @@ web: gunicorn app:app
 python-3.9.1
  ```
 
-We deploy with Git. Here's a set of commands to do that.
+We deploy with Git. Here's a set of commands to do that.  You can create the new heroku app using the CLI. If you have created it using the heroku.com dashboard, you can just add the link that heroku created for you in a `git:remote` command.
 
 ```bash
 git init
@@ -287,7 +287,7 @@ See the [docs](https://devcenter.heroku.com/articles/git) for more options on se
 
 ## Test the API deployed on Heroku
 
-If you have a GET method API like the "hello world" in the app.py example, you can open the heroku and in the browser.
+If you have a GET method API like the "hello world" in the app.py example, you can open the heroku app in the browser.
 
 For end to end testing, you can POST to the heroku server link from Postman and you should see similar results as to our local testing.
 
