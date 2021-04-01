@@ -1,6 +1,6 @@
 # Using Flack to Create an API to Upload Data to Cloudinary
 
-[Code]()
+[Code](https://github.com/rebeccapeltz/flask-cld-upload)
 
 ## Cloudinary SDK's
 
@@ -226,8 +226,83 @@ Heroku is a PAAS (Platform as a Service) that can be used for serving prototypes
 
 Start by creating a free account on Heroku.
 
+To deploy to Heroku, you need to create a file named `Prodfile`.  This file gives Heroku instructions on how to start your server.  [Gunicorn](https://gunicorn.org/), short for Green Unicorn, is a Python WSGI HTTP Server for Python that we can use to host the app.  Install Gunicorn.
+
+```bash
+ python3 -m pip install gunicorn==20.0.4
+ python3 -m pip freeze > requirements.txt
+ ```
+
+ Then add instructions to start the app using Gunicorn in the Procfile.
+
+ ```bash
+web: gunicorn app:app
+ ```
+
+ Create a file named `runtime.txt` and add the version of Python you want to use.  Use the ver
+
+ ```text
+python-3.9.1
+ ```
+
+We deploy with Git. Here's a set of commands to do that.
+
+```bash
+git init
+git add .
+git commit -m"my first commit"
+# create a new heroku app
+heroku create
+# you should get back a URL where the app will be hosted
+git remote -v
+# will confirm that you have set up a remote to push to heroku
+
+# if you have an existing heroku app that you created in the Heroku GUI
+# you can add it with this commmand instead of creating a new one
+heroku git:remote -a thawing-inlet-61413
+
+# to deploy you can now just push to heroku
+git push heroku master
+
+# open your server (it's nice to have a GET method so you can verify like this)
+heroku open
+
+# if you need to login to heroku from the command line
+heroku login
+# this will prompt you to open the web page to login
+
+```
+
+### Environment Variables on Heroku
+
+Open the dashboard and navigate to your new server instance. Click on the Settings tab and scroll down to the **Config Vars** section.  If you click on **Reveal Config Vars**, you'll find you can enter Key/Value pairs here.  This is where you should load your Cloudinary environment variables: CLOUD_NAME, API_KEY, API_SECRET.
+
+![Heroku Config Vars](environmentvars.jpg)
+
+See the [docs](https://devcenter.heroku.com/articles/git) for more options on setting up prod and dev instances.
+
+
 
 ## Test the API deployed on Heroku
 
+If you have a GET method API like the "hello world" in the app.py example, you can open the heroku and in the browser.
 
+For end to end testing, you can POST to the heroku server link from Postman and you should see similar results as to our local testing.
 
+![Remote Post](remotepost.jpg)
+
+You can also modify the `index.html` file to post to your heroku server.  Just change the `fetch` command to use your heroku server link.
+
+```JavaScript
+fetch("https://xxxx.herokuapp.com", options)
+```
+
+## Security Note
+
+Deploying this app to heroku enables you to upload data to Cloudinary.  If the link is not secured, for example, by using it only on an authenticated web page, anyone can upload to your Cloudinary cloud.  Even though you are hiding your environment variables, you have created an public method to change data on your cloud.
+
+This document doesn't cover adding authentication.  There are many options available.   
+
+## Next Steps
+
+Once you get this API running, you can build other Media API's using the Cloudinary Python SDK by following the same pattern. 
