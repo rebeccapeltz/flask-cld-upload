@@ -1,4 +1,4 @@
-# Using Flack to Create an API Data to Cloudinary
+# Using Flack to Create an API to Upload Data to Cloudinary
 
 [Code]()
 
