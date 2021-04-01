@@ -157,10 +157,66 @@ python3 -m pip freeze > requirements.txt
 
 ## Testing the API Locally 
 
-We're now ready to test the app locally.  
+We're now ready to test the app locally.  We can do some end to end testing using Postman and a local form pointing at a server running on localhost.
+
+You can create your app with an upload function by downloading, cloning or copying from [this](https://github.com/rebeccapeltz/flask-cld-upload/blob/master/app.py).  Add you credentials to a `.env` file. Start your server on localhost.
+
+```bash
+python3 app.py
+```
+
+This will open a server at `http://127.0.0.1:5000/`.
+
+### Postman
+
+In Postman, you want to 
+- Set the method to POST 
+- Set the body type to `form-data`
+- Establish Key/Value pairs for input.  The Key should be `file`.  You'll find that as you hover over the Key field, there is a drop down and you can select **Text** or **File**. Select File and then you'll see a **Select Files** button and you can select a file from your local drive  
+- Now press Send to process the request
+- You'll see the Cloudinary Upload API response in the in the Body result at the bottom of the page.
+
+![Localhost with Postman](localpostman.jpg)
+
+### Local Form
+
+Open the `index.html` using a local HTTP server.  Choose a local file and press upload.
+
+The `fetch` command will call the server running on localhost.  If it's successful, you'll see the Cloudinary Upload API response in the console. 
+
+```JavaScript
+ fetch("http://127.0.0.1:5000/upload", options)
+  .then((response) => {
+    return response.json();
+  })
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+```
+Don't forget to ` event.preventDefault();` when using a submit handler or you'll get a page refresh, and won't see your log.
+
+To post a file in a submit handler, you'll need to create a FormData object and append the file as shown in the code below.
+
+```JavaScript
+const formData = new FormData();
+formData.append("file", fileInput.files[0]);
+const options = {
+  method: "POST",
+  body: formData,
+};
+```
+This will package up the file you select in your form input as if you had submitted a multi/part-form.  When submitting files, you want to use multi/part a form because each input is sent as a block of data separated by boundaries.  
+
+You should observe a result like this in your console.
+
+![local form](formlocal.jpg)
 
 
 ## Deploying the Flask App to Heroku
+
 
 
 ## Test the API deployed on Heroku
