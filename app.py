@@ -1,5 +1,4 @@
 import cloudinary
-
 import cloudinary.uploader
 import cloudinary.api
 import logging
@@ -52,7 +51,7 @@ def cld_optimize():
     public_id = request.form['public_id']
     app.logger.info('%s public id', public_id)
     if public_id:
-      cld_url = cloudinary_url(public_id, fetch_format='auto', quality='auto')
+      cld_url = cloudinary_url(public_id, fetch_format='auto', quality='auto', secure=True)
       
       app.logger.info(cld_url)
       return jsonify(cld_url)
